@@ -19,9 +19,10 @@
  * The algo is public domain:
  * http://www.isthe.com/chongo/tech/comp/fnv/
  */
+
 uint32_t stockTableHash(char* key, size_t strLen, size_t tableSize){
 	uint32_t hash = FNV_OFFSET_BASIS;
-	for (int i = 0; i < strLen; i++){
+	for (int i = 0; i < strLen; i++){ // magic!
 		hash ^= *(key + i); // get char in index i in string
 		hash *= FNV_PRIME;  
 	}

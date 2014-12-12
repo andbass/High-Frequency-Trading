@@ -26,8 +26,6 @@ SHELL := /bin/bash
 
 PERCENT=$(shell bc <<< "scale=2; $(NUM_COMPILED_FILES) / $(NUMFILES) * 100")
 
--include $(DEP)
-
 build : compile remove_unused_objects
 
 rebuild : clean build
@@ -35,6 +33,8 @@ rebuild : clean build
 compile : $(OBJ) 
 	@$(CC) $^ -o $(OUTPUT) $(CFLAGS)	
 	@echo "Linking done. Compilation successful."
+
+-include $(DEP)
 
 NUM_COMPILED_FILES:=0
 obj/%.o : src/%.$(EXT) 
@@ -48,6 +48,7 @@ FILES_IN_OBJ = $(shell find obj -name *.o)
 remove_unused_objects :
 ifneq '' '$(filter-out $(OBJ), $(FILES_IN_OBJ))' # finds out which object files no longer have an associated source file
 	rm -r $(filter-out $(OBJ), $(FILES_IN_OBJ))
+	rm -r $(filter-out $(DEP), $(FILES_IN_OBJ:%.o=%.d))
 else
 	@echo "No object files require deletion."
 endif
@@ -70,5 +71,3 @@ debug :
 	@echo Dependencies: $(DEP)
 	@echo All files in Object folder: $(FILES_IN_OBJ)
 	@echo
-
-.PHONY: clean build rebuild remove_unused_objects debug

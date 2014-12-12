@@ -39,5 +39,4 @@ bool stockTableGet(char* key, float* out);
 
 uint32_t stockTableHash(char* key, size_t keyLen, size_t tableSize); // generates index for a given stock name. Not sure what algo to use
 
-
 #endif
