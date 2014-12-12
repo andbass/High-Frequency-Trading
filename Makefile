@@ -17,14 +17,11 @@ else
 endif
 
 SRC:=$(shell find src -name *.${EXT})
-NUMFILES:=$(words $(SRC))
 OBJ:=$(SRC:src/%.c=obj/%.o)
 DEP:=$(OBJ:%.o=%.d)
 
 CFLAGS:= -std=$(STD) $(LIBS)
 SHELL := /bin/bash
-
-PERCENT=$(shell bc <<< "scale=2; $(NUM_COMPILED_FILES) / $(NUMFILES) * 100")
 
 build : compile remove_unused_objects
 
@@ -41,7 +38,7 @@ obj/%.o : src/%.$(EXT)
 	@mkdir -p $(@D) # $(@D) <- Gets directory part of target path
 	@$(CC) $< -o $@ $(CFLAGS) -c -MMD -MP
 	@$(eval NUM_COMPILED_FILES=$(shell bc <<< "$(NUM_COMPILED_FILES) + 1"))
-	@echo -e "[`tput bold``tput setaf 2`$(PERCENT)%`tput sgr0`] Compiled `tput bold``tput setaf 3`$<`tput sgr0`."
+	@echo -e "Compiled `tput bold``tput setaf 3`$<`tput sgr0`."
 
 FILES_IN_OBJ = $(shell find obj -name *.o)
 
