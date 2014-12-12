@@ -11,7 +11,7 @@
  * for a particular index is stored to accomdate collisons
  *
  * I should really switch it to a dynamically sized array
- * later on, but a linked list will be simpler to get it working
+ * later on, but a linked list will be simpler to get it working.
  */
 struct StockEntry {
 	char* stock;

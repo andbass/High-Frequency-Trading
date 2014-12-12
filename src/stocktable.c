@@ -22,8 +22,8 @@
 uint32_t stockTableHash(char* key, size_t strLen, size_t tableSize){
 	uint32_t hash = FNV_OFFSET_BASIS;
 	for (int i = 0; i < strLen; i++){
-		hash ^= *(key + i);
-		hash *= FNV_PRIME;
+		hash ^= *(key + i); // get char in index i in string
+		hash *= FNV_PRIME;  
 	}
 	return hash % tableSize;
 }
