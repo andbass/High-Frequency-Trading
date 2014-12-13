@@ -6,13 +6,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-/* A linked list meant to be stored within a StockTable.
- * Basically a hashtable entry, where a pointer to the next entry
- * for a particular index is stored to accomdate collisons
- *
- * I should really switch it to a dynamically sized array
- * later on, but a linked list will be simpler to get it working.
- */
+/* A linked list meant to be stored within a StockTable. */
 struct StockEntry {
 	char* stock;
 	float price;
@@ -22,11 +16,6 @@ struct StockEntry {
 
 /*
  * Basically a hashtable geared towards storing stock info
- *
- * Namely instead of using a generic char* to store binary data a float is used
- * since you'd never want to store anything else other than stock prices.
- * Saves some time since you can skip using memcpy to insert data.
- * Also no need for the user to use pointers or anoymous arrays
  */
 struct StockTable {
 	struct StockEntry* entries;
