@@ -20,7 +20,7 @@ struct StockEntry {
 struct StockTable {
 	struct StockEntry* entries;
 	size_t size; // Larger size means less chance of collisons, so make this baby large!!!
-	size_t bitMask; // bitMask ANDed with hash.
+	size_t bitMask; // this is ANDed with hash.
 };
 
 bool stockTableNew(struct StockTable* table, size_t approxSize);

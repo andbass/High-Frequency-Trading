@@ -10,5 +10,7 @@ int main(int argc, char* argv[]){
 
 	stockTableSet(&table, "TEST", 4);
 
+	
+
 	return EXIT_SUCCESS;
 }

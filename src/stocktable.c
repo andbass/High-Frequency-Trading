@@ -27,25 +27,26 @@ bool stockTableSet(struct StockTable* table, char* key, float value){
 	uint32_t index = stockTableHash(key, strlen(key), table->bitMask);
 	struct StockEntry* entry = table->entries + index;
 
-	/* either get the entry with the same key value or get the next empty slot
-	 * only need to do this if the first slot is occupied */
+	// only search through list if first slot isnt open
 	if (entry->stock != NULL){
+
 		while (entry != NULL){
 			if (strcmp(key, entry->stock) == 0) {
 				break;
 			}
 			entry = entry->next;
 		}
-	}
 
-	// if entry is NULL, that means we need to make a new slot.
-	if (entry == NULL){
-		entry = malloc(sizeof(struct StockEntry));
-		if (entry == NULL) return false;
+		// if entry is NULL, that means we need to make a new slot.
+		if (entry == NULL){
+			entry = malloc(sizeof(struct StockEntry));
+			if (entry == NULL) return false;
 
-		entry->stock = NULL;
-		entry->price = 0;
-		entry->next = NULL;
+			entry->stock = NULL;
+			entry->price = 0;
+			entry->next = NULL;
+		}
+
 	}
 
 	entry->stock = key;
