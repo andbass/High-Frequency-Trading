@@ -58,10 +58,13 @@ bool stockTableGet(struct StockTable* table, char* key, float* out){
 	uint32_t index = stockTableHash(key, strlen(key), table->bitMask);
 	struct StockEntry* entry = table->entries + index;
 
-	while (entry != NULL){
-		if (strcmp(key, entry->stock) == 0) {
-			*out = entry->price;
-			return true;
+	if (entry->stock != NULL){
+		while (entry != NULL){
+			if (strcmp(key, entry->stock) == 0) {
+				*out = entry->price;
+				return true;
+			}
+			entry = entry->next;
 		}
 	}
 	return false;
@@ -73,9 +76,9 @@ bool stockTableGet(struct StockTable* table, char* key, float* out){
  * The algo is public domain:
  * http://www.isthe.com/chongo/tech/comp/fnv/
  */
-uint32_t stockTableHash(char* key, size_t strLen, size_t bitMask){
+uint32_t stockTableHash(char* key, size_t strLen, size_t bitMask) {
 	uint32_t hash = FNV_OFFSET_BASIS;
-	for (int i = 0; i < strLen; i++){ // magic!
+	for (int i = 0; i < strLen; i++) {
 		hash ^= *(key + i); // get char in index i in string
 		hash *= FNV_PRIME;  
 	}
@@ -85,7 +88,7 @@ uint32_t stockTableHash(char* key, size_t strLen, size_t bitMask){
 /* http://stackoverflow.com/questions/53161/find-the-highest-order-bit-in-c
  * Using this for quick modulo, as seen in: http://codereview.stackexchange.com/questions/73542/hashtable-implementation
  */
-int highestOrderBit(int n){
+int highestOrderBit(int n) {
 	n |= (n >>  1);
     n |= (n >>  2);
     n |= (n >>  4);

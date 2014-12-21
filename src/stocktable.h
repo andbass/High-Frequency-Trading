@@ -27,7 +27,7 @@ bool stockTableNew(struct StockTable* table, size_t approxSize);
 bool stockTableSet(struct StockTable* table, char* key, float value);
 bool stockTableGet(struct StockTable* table, char* key, float* out);
 
-uint32_t stockTableHash(char* key, size_t keyLen, size_t tableSize); // generates index for a given stock name. Not sure what algo to use
+uint32_t stockTableHash(char* key, size_t keyLen, size_t bitMask);
 int highestOrderBit(int n);
 
 #endif
