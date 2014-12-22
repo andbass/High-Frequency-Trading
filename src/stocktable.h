@@ -9,7 +9,9 @@
 /* A linked list meant to be stored within a StockTable. */
 struct StockEntry {
 	char* stock;
+
 	float price;
+	int sharesOwned;
 
 	struct StockEntry* next;
 };
@@ -23,11 +25,30 @@ struct StockTable {
 	size_t bitMask; // this is ANDed with hash.
 };
 
+/*
+ * Creates a new StockTable
+ */
 bool stockTableNew(struct StockTable* table, size_t approxSize);
-bool stockTableSet(struct StockTable* table, char* key, float value);
-bool stockTableGet(struct StockTable* table, char* key, float* out);
 
+/*
+ * Sets a stock's price.  
+ */
+bool stockTableSetPrice(struct StockTable* table, char* key, float value);
+
+/*
+ * Gets information about stock, if it is stored in the StockTable.
+ * Returns NULL if the key could not be matched
+ */
+struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key);
+
+/*
+ * Calculates hash value for a key
+ */
 uint32_t stockTableHash(char* key, size_t keyLen, size_t bitMask);
+
+/*
+ * Will return the MSB of a binary number
+ */
 int highestOrderBit(int n);
 
 #endif

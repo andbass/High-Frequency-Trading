@@ -4,6 +4,19 @@
 #define FNV_OFFSET_BASIS 2166136261
 #define FNV_PRIME 16777619
 
+/*
+ * Initalizes a StockEntry struct
+ */
+static void stockEntryNew(struct StockEntry* entry){
+		entry->stock = NULL;
+		entry->price = 0;
+		entry->sharesOwned = 0;
+		entry->next = NULL;
+}
+
+/*
+ * Initalizes a StockTable struct
+ */
 bool stockTableNew(struct StockTable* table, size_t approxSize){
 	size_t realSize = highestOrderBit(approxSize) << 1;
 
@@ -14,16 +27,17 @@ bool stockTableNew(struct StockTable* table, size_t approxSize){
 	if (table->entries != NULL) {
 		for (unsigned int i = 0; i < realSize; i++){
 			struct StockEntry* entry = table->entries + i;
-			entry->stock = NULL;
-			entry->price = 0;
-			entry->next = NULL;
+			stockEntryNew(entry);
 		}
 		return true;
 	}
 	return false;
 }
 
-bool stockTableSet(struct StockTable* table, char* key, float value){
+/*
+ * Sets price per share for a particular stock
+ */
+bool stockTableSetPrice(struct StockTable* table, char* key, float value){
 	uint32_t index = stockTableHash(key, strlen(key), table->bitMask);
 	struct StockEntry* entry = table->entries + index;
 
@@ -40,11 +54,9 @@ bool stockTableSet(struct StockTable* table, char* key, float value){
 		// if entry is NULL, that means we need to make a new slot.
 		if (entry == NULL){
 			entry = malloc(sizeof(struct StockEntry));
-			if (entry == NULL) return false;
 
-			entry->stock = NULL;
-			entry->price = 0;
-			entry->next = NULL;
+			if (entry == NULL) return false;
+			stockEntryNew(entry);
 		}
 
 	}
@@ -54,20 +66,22 @@ bool stockTableSet(struct StockTable* table, char* key, float value){
 	return true;	
 }
 
-bool stockTableGet(struct StockTable* table, char* key, float* out){
+/*
+ * Finds a StockEntry based on the stock name specified.
+ */
+struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key){
 	uint32_t index = stockTableHash(key, strlen(key), table->bitMask);
 	struct StockEntry* entry = table->entries + index;
 
 	if (entry->stock != NULL){
 		while (entry != NULL){
 			if (strcmp(key, entry->stock) == 0) {
-				*out = entry->price;
-				return true;
+				return entry;
 			}
 			entry = entry->next;
 		}
 	}
-	return false;
+	return NULL;
 }
 
 /*

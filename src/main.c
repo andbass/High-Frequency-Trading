@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "stocktable.h"
+#include "conf.h"
 
 void printCollisons(int arr[], int count);
 
@@ -10,7 +12,12 @@ int main(int argc, char* argv[]){
 	struct StockTable table;
 	stockTableNew(&table, 10000);
 
-	stockTableSet(&table, "Andrew", 420);
+	float budget = 0, threshold = 0;
+
+	parseConf("prices.conf", &budget, &threshold, &table); 
+
+	printf("Budget: %f\n", budget);
+	printf("Threshold: %f\n", threshold);
 
 	return EXIT_SUCCESS;
 }
