@@ -33,19 +33,18 @@ compile : $(OBJ)
 
 -include $(DEP)
 
-NUM_COMPILED_FILES:=0
 obj/%.o : src/%.$(EXT) 
 	@mkdir -p $(@D) # $(@D) <- Gets directory part of target path
 	@$(CC) $< -o $@ $(CFLAGS) -c -MMD -MP
-	@$(eval NUM_COMPILED_FILES=$(shell bc <<< "$(NUM_COMPILED_FILES) + 1"))
 	@echo -e "Compiled `tput bold``tput setaf 3`$<`tput sgr0`."
 
 FILES_IN_OBJ = $(shell find obj -name *.o)
 
 remove_unused_objects :
 ifneq '' '$(filter-out $(OBJ), $(FILES_IN_OBJ))' # finds out which object files no longer have an associated source file
-	rm -r $(filter-out $(OBJ), $(FILES_IN_OBJ))
-	rm -r $(filter-out $(DEP), $(FILES_IN_OBJ:%.o=%.d))
+	-@rm -r $(filter-out $(OBJ), $(FILES_IN_OBJ))
+	-@rm -r $(filter-out $(DEP), $(FILES_IN_OBJ:%.o=%.d))
+	@echo "Cleaned out unused .o and .dep files"
 else
 	@echo "No object files require deletion."
 endif
