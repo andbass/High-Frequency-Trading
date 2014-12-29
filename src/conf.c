@@ -14,12 +14,12 @@ static const int SUCCESS = 0;
  * Can specify temporary buffer used
  */
 inline static float getFloat(FILE* file, char buf[], size_t size){
-	int ch = getc(file);
-	while (ch != EOF && ch != '='){
+	int ch = 0;
+	do {
 		ch = getc(file);
-	} 
+	} while (ch != EOF && ch != '=');
 
-	fgets(buf, size, file); // should be budget line
+	fgets(buf, size, file); // everything after equals sign should be the float value
 
 	char* endPtr;
 	float val = strtof(buf, &endPtr);
@@ -31,11 +31,11 @@ inline static float getFloat(FILE* file, char buf[], size_t size){
 	return val;
 }
 
-static void gotoNextLine(FILE* file){
+inline static void gotoNextLine(FILE* file){
 	int ch = 0;
-	while (ch != EOF && ch != '\n'){
+	do {
 		ch = getc(file);
-	}
+	} while (ch != EOF && ch != '\n');
 }
 
 /*
@@ -46,7 +46,6 @@ static void gotoNextLine(FILE* file){
  * or 1 if an error is encountered in parsing.
  */
 inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char buf[], size_t size){
-	
 	unsigned int i = 0;
 	int ch = 0;
 	while (i < size - 1){ // why (size - 1)?  leave room for null terminator
@@ -54,13 +53,13 @@ inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char 
 	
 		// by skipping whitespace, we avoid having to later trim the string at the cost of disallowing spaces in key names.  
 		// an ok trade off here, since stock tickets never have spaces anyways
-		if (!isspace(ch)){
+		if (!isspace(ch)) {
 			if (ch == '=') {
 				break;
 			} else if (ch == '#') { 
 				gotoNextLine(file);
 				return SUCCESS;
-			} else if (ch == EOF){
+			} else if (ch == EOF) {
 				return EOF;
 			}
 			
@@ -116,4 +115,6 @@ void parseConf(char* path, float* budget, float* threshold, struct StockTable* t
 		}	
 
 	}
+
+	fclose(file);
 }

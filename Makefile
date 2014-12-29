@@ -22,11 +22,20 @@ DEP:=$(OBJ:%.o=%.d)
 
 CFLAGS:= -std=$(STD) $(LIBS)
 SHELL := /bin/bash
+INSTALL_DIR := /usr/local/bin
 
 build : compile remove_unused_objects
 
 rebuild : clean build
-	
+
+install : build
+	@install ./$(OUTPUT) $(INSTALL_DIR)
+	@echo Install complete!
+
+uninstall :
+	-@rm $(INSTALL_DIR)/$(OUTPUT)
+	@echo Uninstall complete!
+
 compile : $(OBJ) 
 	@$(CC) $^ -o $(OUTPUT) $(CFLAGS)	
 	@echo "Linking done. Compilation successful."
