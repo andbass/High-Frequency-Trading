@@ -47,24 +47,27 @@ static void gotoNextLine(FILE* file){
  */
 inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char buf[], size_t size){
 	
-	int i = 0;
+	unsigned int i = 0;
 	int ch = 0;
-	while (true){
+	while (i < size){
 		ch = getc(file);
 		
-		if (ch == '=') {
-			break;
-		} else if (ch == '#') {
-			gotoNextLine(file);
-			return SUCCESS;
-		} else if (ch == EOF){
-			return EOF;
+		if (ch != ' '){
+			if (ch == '=') {
+				break;
+			} else if (ch == '#') {
+				gotoNextLine(file);
+				return SUCCESS;
+			} else if (ch == EOF){
+				return EOF;
+			}
+			
+			buf[i] = ch;
 		}
-		
-		buf[i] = ch;
+
 		++i;
 	}
-	buf[i] = '\0'; // null terminate
+	buf[i] = '\0'; // null terminater
 	
 	char numberBuf[2048];
 	if (fgets(numberBuf, 2048, file) == NULL) {
