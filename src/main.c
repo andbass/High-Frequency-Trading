@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
+#include <time.h>
 
 #include "stocktable.h"
 #include "conf.h"
@@ -13,11 +15,17 @@ int main(int argc, char* argv[]){
 	stockTableNew(&table, 10000);
 
 	float budget = 0, threshold = 0;
+	parseConf("prices.conf", &budget, &threshold, &table);	
 
-	parseConf("prices.conf", &budget, &threshold, &table); 
+	struct StockEntry* entry = stockTableGetEntry(&table, "AOL");
 
-	printf("Budget: %f\n", budget);
-	printf("Threshold: %f\n", threshold);
+	printf("%s, %f\n", entry->stock, entry->price);
+
+	clock_t start = clock();
+	stockTableFree(&table);
+	clock_t end = clock();
+
+	printf("%ld\n", end - start);
 
 	return EXIT_SUCCESS;
 }

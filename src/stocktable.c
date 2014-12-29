@@ -7,11 +7,22 @@
 /*
  * Initalizes a StockEntry struct
  */
-static void stockEntryNew(struct StockEntry* entry){
+void stockEntryNew(struct StockEntry* entry){
 		entry->stock = NULL;
 		entry->price = 0;
 		entry->sharesOwned = 0;
 		entry->next = NULL;
+}
+
+/*
+ * Frees allocated memory within StockEntry struct
+ */
+void stockEntryFree(struct StockEntry* entry){
+	while(entry != NULL){
+		free(entry->stock);
+		entry = entry->next;
+		free(entry);
+	}
 }
 
 /*
@@ -38,14 +49,17 @@ bool stockTableNew(struct StockTable* table, size_t approxSize){
  * Sets price per share for a particular stock
  */
 bool stockTableSetPrice(struct StockTable* table, char* key, float value){
-	uint32_t index = stockTableHash(key, strlen(key), table->bitMask);
+	uint32_t index = stockTableHash(key, table->bitMask);
 	struct StockEntry* entry = table->entries + index;
+
+	bool isSameKey = false;
 
 	// only search through list if first slot isnt open
 	if (entry->stock != NULL){
 
 		while (entry != NULL){
 			if (strcmp(key, entry->stock) == 0) {
+				isSameKey = true;
 				break;
 			}
 			entry = entry->next;
@@ -60,8 +74,13 @@ bool stockTableSetPrice(struct StockTable* table, char* key, float value){
 		}
 
 	}
+	
+	if (!isSameKey){
+		free(entry->stock);
+		entry->stock = malloc(sizeof(char) * strlen(key));
+		strcpy(entry->stock, key);
+	}	
 
-	entry->stock = key;
 	entry->price = value;
 	return true;	
 }
@@ -70,7 +89,7 @@ bool stockTableSetPrice(struct StockTable* table, char* key, float value){
  * Finds a StockEntry based on the stock name specified.
  */
 struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key){
-	uint32_t index = stockTableHash(key, strlen(key), table->bitMask);
+	uint32_t index = stockTableHash(key, table->bitMask);
 	struct StockEntry* entry = table->entries + index;
 
 	if (entry->stock != NULL){
@@ -90,13 +109,26 @@ struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key){
  * The algo is public domain:
  * http://www.isthe.com/chongo/tech/comp/fnv/
  */
-uint32_t stockTableHash(char* key, size_t strLen, size_t bitMask) {
+uint32_t stockTableHash(char* key, size_t bitMask) {
 	uint32_t hash = FNV_OFFSET_BASIS;
-	for (int i = 0; i < strLen; i++) {
-		hash ^= *(key + i); // get char in index i in string
+	
+	int i = 0;
+	while (key[i] != '\0') {
+		hash ^= key[i]; // get char in index i in string
 		hash *= FNV_PRIME;  
+		++i;
 	}
 	return hash & bitMask;
+}
+
+/*
+ * Frees memory allocated in the creation of a StockTable
+ */
+void stockTableFree(struct StockTable* table) {
+	for(unsigned int i = 0; i < table->size; i++){
+		stockEntryFree(table->entries + i);
+	}
+	free(table->entries);
 }
 
 /* http://stackoverflow.com/questions/53161/find-the-highest-order-bit-in-c
