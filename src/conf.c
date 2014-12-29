@@ -49,13 +49,15 @@ inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char 
 	
 	unsigned int i = 0;
 	int ch = 0;
-	while (i < size){
+	while (i < size - 1){ // why (size - 1)?  leave room for null terminator
 		ch = getc(file);
-		
-		if (ch != ' '){
+	
+		// by skipping whitespace, we avoid having to later trim the string at the cost of disallowing spaces in key names.  
+		// an ok trade off here, since stock tickets never have spaces anyways
+		if (!isspace(ch)){
 			if (ch == '=') {
 				break;
-			} else if (ch == '#') {
+			} else if (ch == '#') { 
 				gotoNextLine(file);
 				return SUCCESS;
 			} else if (ch == EOF){
@@ -63,12 +65,12 @@ inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char 
 			}
 			
 			buf[i] = ch;
+			++i;
 		}
 
-		++i;
 	}
-	buf[i] = '\0'; // null terminater
-	
+	buf[i] = '\0';
+
 	char numberBuf[2048];
 	if (fgets(numberBuf, 2048, file) == NULL) {
 		return EOF;
@@ -108,8 +110,7 @@ void parseConf(char* path, float* budget, float* threshold, struct StockTable* t
 	
 	int returnCode = 0;
 	while ((returnCode = insertKeyValuePair(file, table, buf, 1024)) != EOF){
-		
-		if (returnCode == 1){
+		if (returnCode == FAILURE){
 			printf("Error encountered in parsing key value pairs in conf file\n");
 			exit(EXIT_FAILURE);
 		}	

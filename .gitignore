@@ -1,0 +1,5 @@
+# Ignore any output files or archives
+*.[oa]
+
+# ignore the generated output file
+hft

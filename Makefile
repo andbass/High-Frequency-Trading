@@ -1,6 +1,6 @@
 
 LANG:=C
-OUTPUT:=run
+OUTPUT:=hft
 LIBS:=
 
 
@@ -50,7 +50,7 @@ else
 endif
 	
 clean : 
-	@rm -r obj
+	@rm -r obj/*
 	@rm $(shell find . -name $(OUTPUT)*)
 	@echo "Cleaned out object files and binaries."
 
