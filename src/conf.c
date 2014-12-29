@@ -1,7 +1,8 @@
-
 #include "conf.h"
+
 #include <string.h>
 #include <ctype.h>
+#include <assert.h>
 #include "stocktable.h"
 
 static const int FAILURE = 1;
@@ -30,6 +31,13 @@ inline static float getFloat(FILE* file, char buf[], size_t size){
 	return val;
 }
 
+static void gotoNextLine(FILE* file){
+	int ch = 0;
+	while (ch != EOF && ch != '\n'){
+		ch = getc(file);
+	}
+}
+
 /*
  * Extracts a key-value pair out of conf file.  For instance: TEST=10
  * Supports comments, returns whether the file has reached EOF or not.
@@ -47,11 +55,12 @@ inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char 
 		if (ch == '=') {
 			break;
 		} else if (ch == '#') {
+			gotoNextLine(file);
 			return SUCCESS;
 		} else if (ch == EOF){
 			return EOF;
 		}
-
+		
 		buf[i] = ch;
 		++i;
 	}
