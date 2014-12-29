@@ -1,5 +1,8 @@
-# Ignore any output files or archives
+# ignore any output files or archives
 *.[oa]
 
 # ignore the generated output file
 hft
+
+# ignore vim's .swp temp files
+*.swp
