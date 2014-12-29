@@ -1,6 +1,9 @@
 # ignore any output files or archives
 *.[oa]
 
+# ignore python bytecode, used by YouCompleteMe autocomplete setup script
+*.pyc
+
 # ignore the generated output file
 hft
 
