@@ -26,14 +26,14 @@ int main(int argc, char* argv[]){
 	float budget = 0, threshold = 0;
 	parseConf("prices.conf", &budget, &threshold, &table);	
 
-	printf("Budget: %f, Threshold: %f\n\n", budget, threshold);
+	printf("Budget: %.3f, Threshold: %.3f\n\n", budget, threshold);
 
 	struct StockEntry* entry = stockTableGetEntry(&table, "AMD");
 
 	if (entry == NULL) {
 		printf("Could not find stock entry you fuck\n");
 	} else {
-		printf("%s, %f\n", entry->stock, entry->price);
+		printf("%s, %.3f\n", entry->stock, entry->price);
 	}
 
 	return EXIT_SUCCESS;
