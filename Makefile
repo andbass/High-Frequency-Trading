@@ -1,11 +1,9 @@
-
 LANG:=C
 OUTPUT:=hft
 LIBS:=
 
-
 ifeq "$(LANG)" "C++"
-	EXT:=cpp
+       	EXT:=cpp
 	STD:=c++11
 	CC:=$(CXX)
 else ifeq "$(LANG)" "C"
@@ -17,7 +15,7 @@ else
 endif
 
 SRC:=$(shell find src -name *.${EXT})
-OBJ:=$(SRC:src/%.c=obj/%.o)
+OBJ:=$(SRC:src/%.${EXT}=obj/%.o)
 DEP:=$(OBJ:%.o=%.d)
 
 CFLAGS:= -std=$(STD) $(LIBS)
@@ -40,18 +38,20 @@ compile : $(OBJ)
 	@$(CC) $^ -o $(OUTPUT) $(CFLAGS)	
 	@echo "Linking done. Compilation successful."
 
--include $(DEP)
-
 obj/%.o : src/%.$(EXT) 
 	@mkdir -p $(@D) # $(@D) <- Gets directory part of target path
-	@$(CC) $< -o $@ $(CFLAGS) -c -MMD -MP
-	@echo -e "Compiled `tput bold``tput setaf 3`$<`tput sgr0`."
+	@if $(CC) $< -o $@ $(CFLAGS) -c -MMD -MP; then\
+		echo -e "Compiled `tput bold``tput setaf 3`$<`tput sgr0`.";\
+	fi
 
-FILES_IN_OBJ = $(shell find obj -name *.o)
+
+-include $(DEP)
+
+-FILES_IN_OBJ = $(shell find obj -name *.o)
 
 remove_unused_objects :
 ifneq '' '$(filter-out $(OBJ), $(FILES_IN_OBJ))' # finds out which object files no longer have an associated source file
-	-@rm -r $(filter-out $(OBJ), $(FILES_IN_OBJ))
+	@rm -r $(filter-out $(OBJ), $(FILES_IN_OBJ))
 	-@rm -r $(filter-out $(DEP), $(FILES_IN_OBJ:%.o=%.d))
 	@echo "Cleaned out unused .o and .dep files"
 else
@@ -71,7 +71,6 @@ debug :
 	@echo
 	@echo Binary Name: $(OUTPUT)
 	@echo Source Files: $(SRC) 
-	@echo Total Number of Source Files: $(NUMFILES)
 	@echo Object Files: $(OBJ)
 	@echo Dependencies: $(DEP)
 	@echo All files in Object folder: $(FILES_IN_OBJ)
