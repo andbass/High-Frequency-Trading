@@ -16,35 +16,41 @@
 #include "command.h"
 
 void printCollisons(int arr[], int count);
+void printStock(struct StockEntry* entry);
 
 int main(int argc, char* argv[]){
 
 	struct StockTable table;
 	stockTableNew(&table, 10000);
 
-	printf("Size: %d\n", table.size);
-
 	float budget = 0, threshold = 0;
 	parseConf("prices.conf", &budget, &threshold, &table);	
 
-	printf("Budget: %.3f, Threshold: %.3f\n\n", budget, threshold);
-
-	struct StockEntry* entry = stockTableGetEntry(&table, "AMD");
-
-	if (entry == NULL) {
-		printf("Could not find stock entry you fuck\n");
-	} else {
-		printf("%s, %.3f\n", entry->stock, entry->price);
-	}
-
-	printf("\nCommand shit:\n");
+	char* cmdStr = "S AAPL 2 S";
 
 	struct Command cmd;
-	parseCommand("S AAPL 11200 S", &cmd);
-
+	parseCommand(cmdStr, &cmd);
 	printf("Action: %s, Stock: %s, Shares: %d, Safety: %d\n", (cmd.action == BUY) ? "BUY" : "SELL", cmd.stock, cmd.shares, cmd.safe);
+	printf("\n");
+
+	struct StockEntry* entry = stockTableGetEntry(&table, "AAPL");
+	entry->sharesOwned = 10;
+
+	printf("Before: ");
+	printStock(entry);
+	printf("Budget: %f\n\n", budget);
+
+	execCommand(&cmd, &table, &budget, threshold);
+
+	printf("After: ");
+	printStock(entry);
+	printf("Budget: %f\n", budget);
 
 	return EXIT_SUCCESS;
+}
+
+void printStock(struct StockEntry* entry){
+	printf("Stock: %s, Owned: %d, Price: %f\n", entry->stock, entry->sharesOwned, entry->price);
 }
 
 void printCollisons(int arr[], int count){

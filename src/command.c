@@ -70,9 +70,14 @@ bool execCommand(struct Command* cmd, struct StockTable* table, float* budget, c
 			break;
 
 		case SELL:
-			
+			if (cmd->shares > entry->sharesOwned) {
+				printf("Error: could not sell %d shares of %s, as you only own %d\n", cmd->shares, entry->stock, entry->sharesOwned);
+				return false;
+			}
+			entry->sharesOwned -= cmd->shares;
+			*budget += cmd->shares * entry->price;
 			break;
 	}
 
-	return NULL;
+	return true;
 }
