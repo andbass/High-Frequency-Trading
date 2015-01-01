@@ -24,11 +24,25 @@ enum Action {
  */
 struct Command {
 	enum Action action;
-	char* stock;
+	char* stock; 
 	int shares;
 	bool safe;
 };
 
+/*
+ * Frees memory allocated when parsing a command string
+ */
+inline void freeCommand(struct Command* cmd);
+
+/*
+ * Parses a command in string form and converts it into a Command struct.
+ */
+bool parseCommand(char* str, struct Command* cmd);
+
+/*
+ * Executes command insturctions, as encoded within a Command stuct.
+ * Returns whether the command was possible to execute.
+ */
 bool execCommand(struct Command* cmd, struct StockTable* table, float* budget, const float threshold);
 
 #endif

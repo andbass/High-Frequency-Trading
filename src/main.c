@@ -13,6 +13,7 @@
 
 #include "stocktable.h"
 #include "conf.h"
+#include "command.h"
 
 void printCollisons(int arr[], int count);
 
@@ -35,6 +36,13 @@ int main(int argc, char* argv[]){
 	} else {
 		printf("%s, %.3f\n", entry->stock, entry->price);
 	}
+
+	printf("\nCommand shit:\n");
+
+	struct Command cmd;
+	parseCommand("S AAPL 11200 S", &cmd);
+
+	printf("Action: %s, Stock: %s, Shares: %d, Safety: %d\n", (cmd.action == BUY) ? "BUY" : "SELL", cmd.stock, cmd.shares, cmd.safe);
 
 	return EXIT_SUCCESS;
 }
