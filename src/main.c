@@ -49,11 +49,31 @@ int main(int argc, char* argv[]){
 		printf("Error: could not create necessary output files\n");
 	}
 
+	// Setting up hash table and parsing conf
 	struct StockTable table;
 	stockTableNew(&table, 10000);
 
 	double budget = 0, threshold = 0;
 	parseConf("prices.conf", &budget, &threshold, &table);	
-	
+
+	// Entering program loop
+	char buffer[4096];
+	struct Command cmd;
+
+	while (true) {
+		char* line = fgets(buffer, 4096, inputFile);
+
+		if (line == NULL) {
+			break;
+		}
+
+		bool success = parseCommand(line, &cmd);
+		if (!success) exit(EXIT_FAILURE);
+
+		printf("Action: %s, Stock: %s, Shares: %d, Safe: %d\n", (cmd.action == BUY) ? "BUY" : "SELL", cmd.stock, cmd.shares, cmd.safe);
+
+		printf("%s\n", line);
+	}
+
 	return EXIT_SUCCESS;
 }	

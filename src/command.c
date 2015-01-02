@@ -25,6 +25,7 @@ bool parseCommand(char* str, struct Command* cmd){
 	} else if (strcmp(tok, "S") == 0){
 		cmd->action = SELL;
  	} else {
+		printf("Error: %s is an invalid action\n", tok);
 		return false;
 	}
 	
@@ -40,19 +41,26 @@ bool parseCommand(char* str, struct Command* cmd){
 	char* endPtr = NULL;
 	cmd->shares = strtol(tok, &endPtr, 10);
 
-	if (tok == endPtr) return false; // if endPtr points back to string storing number, that means strtol failed
+	if (tok == endPtr) {
+		printf("Could not parse %s into a number\n", tok);
+		return false; // if endPtr points back to string storing number, that means strtol failed
+	}
 
 	// Oh boy, one more! The safety
 	tok = strtok(NULL, SEPERATORS);
 
 	// Like the action, should only be one char	
-	if (strlen(tok) != 1) return false;
+	if (strlen(tok) != 1) {
+		printf("Error: The safety indicator should only be one character: %s\n", tok);
+		return false;
+	}	
 
 	if (strcmp(tok, "S") == 0) {
 		cmd->safe = true;
 	} else if (strcmp(tok, "U") == 0) {
 		cmd->safe = false;
 	} else {
+		printf("Error: %s is an invalid safety symbol\n", tok);
 		return false;
 	}
 
