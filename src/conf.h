@@ -13,6 +13,6 @@
  * If an error is encountered during parsing, the function will
  * kill the program and display an error message.
  */
-void parseConf(char* path, float* budget, float* threshold, struct StockTable* table);
+void parseConf(char* path, double* budget, double* threshold, struct StockTable* table);
 
 #endif

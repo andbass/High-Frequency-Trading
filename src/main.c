@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
 	struct StockTable table;
 	stockTableNew(&table, 10000);
 
-	float budget = 0, threshold = 0;
+	double budget = 0, threshold = 0;
 	parseConf("prices.conf", &budget, &threshold, &table);	
 
 	char* cmdStr = "B AAPL 1 S";

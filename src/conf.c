@@ -9,23 +9,23 @@ static const int FAILURE = 1;
 static const int SUCCESS = 0;
 
 /*
- * Extracts out a float value that is after an equals sign '='
+ * Extracts out a double value that is after an equals sign '='
  * Used for budget and threshold extraction
  * Can specify temporary buffer used
  */
-inline static float getFloat(FILE* file, char buf[], size_t size){
+inline static double getFloat(FILE* file, char buf[], size_t size){
 	int ch = 0;
 	do {
 		ch = getc(file);
 	} while (ch != EOF && ch != '=');
 
-	fgets(buf, size, file); // everything after equals sign should be the float value
+	fgets(buf, size, file); // everything after equals sign should be the double value
 
 	char* endPtr;
-	float val = strtof(buf, &endPtr);
+	double val = strtof(buf, &endPtr);
 
 	if (endPtr == buf) {
-		printf("Error: could not parse float value\n");
+		printf("Error: could not parse double value\n");
 		exit(EXIT_FAILURE);
 	}
 	return val;
@@ -76,7 +76,7 @@ inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char 
 	}
 
 	char* endPtr = NULL;
-	float val = strtof(numberBuf, &endPtr);
+	double val = strtof(numberBuf, &endPtr);
 
 	// this is how strtof lets you know if parsing failed, if the endPtr address is equal to the source pointer string
 	if (endPtr == numberBuf) {
@@ -93,7 +93,7 @@ inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char 
 /*
  * Parses a .conf file for the budget, threshold, and stock prices.  
  */
-void parseConf(char* path, float* budget, float* threshold, struct StockTable* table){
+void parseConf(char* path, double* budget, double* threshold, struct StockTable* table){
 	FILE* file = fopen(path, "r");
 	
 	if (file == NULL) {

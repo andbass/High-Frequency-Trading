@@ -48,7 +48,7 @@ bool stockTableNew(struct StockTable* table, size_t approxSize){
 /*
  * Sets price per share for a particular stock
  */
-bool stockTableSetPrice(struct StockTable* table, char* key, float value){
+bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 	uint32_t index = stockTableHash(key, table->bitMask);
 	struct StockEntry* entry = table->entries + index;
 

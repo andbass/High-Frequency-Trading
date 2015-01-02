@@ -43,6 +43,6 @@ bool parseCommand(char* str, struct Command* cmd);
  * Executes command insturctions, as encoded within a Command stuct.
  * Returns whether the command was possible to execute.
  */
-bool execCommand(struct Command* cmd, struct StockTable* table, float* budget, const float threshold);
+bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, const double threshold);
 
 #endif

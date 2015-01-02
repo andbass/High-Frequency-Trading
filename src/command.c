@@ -59,11 +59,11 @@ bool parseCommand(char* str, struct Command* cmd){
 	return true;
 }
 
-bool execCommand(struct Command* cmd, struct StockTable* table, float* budget, const float threshold){
+bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, const double threshold){
 	struct StockEntry* entry = stockTableGetEntry(table, cmd->stock);	
 	if (entry == NULL) return false;
 
-	float newBudget;
+	double newBudget;
 	switch (cmd->action){
 		
 		case BUY:

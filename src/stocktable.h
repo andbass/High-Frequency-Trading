@@ -10,7 +10,7 @@
 struct StockEntry {
 	char* stock;
 
-	float price;
+	double price;
 	int sharesOwned;
 
 	struct StockEntry* next;
@@ -44,7 +44,7 @@ bool stockTableNew(struct StockTable* table, size_t approxSize);
 /*
  * Sets a stock's price.  
  */
-bool stockTableSetPrice(struct StockTable* table, char* key, float value);
+bool stockTableSetPrice(struct StockTable* table, char* key, double value);
 
 /*
  * Gets information about stock, if it is stored in the StockTable.
