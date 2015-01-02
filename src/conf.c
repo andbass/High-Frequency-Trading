@@ -22,7 +22,7 @@ inline static double getFloat(FILE* file, char buf[], size_t size){
 	fgets(buf, size, file); // everything after equals sign should be the double value
 
 	char* endPtr;
-	double val = strtof(buf, &endPtr);
+	double val = strtod(buf, &endPtr);
 
 	if (endPtr == buf) {
 		printf("Error: could not parse double value\n");
@@ -76,7 +76,7 @@ inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char 
 	}
 
 	char* endPtr = NULL;
-	double val = strtof(numberBuf, &endPtr);
+	double val = strtod(numberBuf, &endPtr);
 
 	// this is how strtof lets you know if parsing failed, if the endPtr address is equal to the source pointer string
 	if (endPtr == numberBuf) {
