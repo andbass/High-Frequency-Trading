@@ -4,6 +4,8 @@
 #define FNV_OFFSET_BASIS 2166136261
 #define FNV_PRIME 16777619
 
+#define LINE_SEPERATOR "===================================\n"
+
 /*
  * Initalizes a StockEntry struct
  */
@@ -34,12 +36,14 @@ bool stockTableNew(struct StockTable* table, size_t approxSize){
 	table->size = realSize;
 	table->bitMask = realSize - 1; // used when generating hash for quick modulo
 	table->entries = malloc(sizeof(struct StockEntry) * realSize);
-	
+	table->index = 0;
+
 	if (table->entries != NULL) {
 		for (unsigned int i = 0; i < realSize; i++){
 			struct StockEntry* entry = table->entries + i;
 			stockEntryNew(entry);
 		}
+
 		return true;
 	}
 
@@ -80,6 +84,8 @@ bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 		free(entry->stock);
 		entry->stock = malloc(sizeof(char) * strlen(key));
 		strcpy(entry->stock, key);
+
+		table->keys[table->index++] = &entry->stock;
 	}	
 
 	entry->price = value;
@@ -102,6 +108,26 @@ struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key){
 		}
 	}
 	return NULL;
+}
+
+void stockTableDump(struct StockTable* table, double originalBudget, double finalBudget, double threshold, FILE* file){
+	fputs(LINE_SEPERATOR, file);
+	fprintf(file, "= Starting Budget:\t%.0lf\t=\n", originalBudget);
+	fputs(LINE_SEPERATOR, file);
+	fprintf(file, "= Ending Budget:\t%.0lf\t=\n", finalBudget);
+	fputs(LINE_SEPERATOR, file);
+	fprintf(file, "= Threshold:\t%.0lf\t=\n", threshold);
+	fputs(LINE_SEPERATOR, file);
+	
+	fputs("=\tSymbol\t=\t# of Shares\t=\n", file);	
+	fputs(LINE_SEPERATOR, file);
+	for (int i = 0; i < table->index; i++){
+		char** keyLocation = table->keys[i]; // why store a pointer to a char pointer you may ask?	
+		int sharesOwned = *(int*)( (double*)(keyLocation + 1) + 1); // SUPER FAST POINTER MAGIC!!!
+		
+		fprintf(file, "=\t%s\t=\t%d\t=\n", *keyLocation, sharesOwned);
+		fputs(LINE_SEPERATOR, file);	
+	}		
 }
 
 /*

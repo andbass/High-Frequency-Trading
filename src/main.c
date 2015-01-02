@@ -15,7 +15,6 @@
 #include "conf.h"
 #include "command.h"
 
-#define LINE "===================================\n"
 
 /*
  * Will get either the input file specified or return stdin, depending on the commandline arguments.
@@ -56,7 +55,7 @@ int main(int argc, char* argv[]){
 
 	// Inital file IO
 	FILE* inputFile = getInputFile(argc, argv);
-	FILE* outputFile = freopen("output.txt", "w", stdout);
+	FILE* outputFile = fopen("output.txt", "w");
 	FILE* executedFile = fopen("executed.txt", "w");
 
 	if (outputFile == NULL || executedFile == NULL) {
@@ -69,6 +68,8 @@ int main(int argc, char* argv[]){
 
 	double budget = 0, threshold = 0;
 	parseConf("prices.conf", &budget, &threshold, &table);	
+
+	double originalBudget = budget;
 
 	// Entering program loop
 	char buffer[4096];
@@ -98,13 +99,15 @@ int main(int argc, char* argv[]){
 
 		if (parseCommand(line, &cmd)){
 			if (execCommand(&cmd, &table, &budget, threshold)){
-				
 				// Output executed command string as is
 				fputs(line, executedFile);	
 			}	
 		}
 	}
 	
+	stockTableDump(&table, originalBudget, budget, threshold, outputFile);
+	stockTableDump(&table, originalBudget, budget, threshold, stdout);
+
 	fclose(inputFile);
 	fclose(executedFile);
 	fclose(outputFile);

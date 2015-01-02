@@ -34,6 +34,9 @@ struct StockTable {
 	struct StockEntry* entries;
 	size_t size; // Larger size means less chance of collisons, so make this baby large!!!
 	size_t bitMask; // this is ANDed with hash.
+
+	char** keys[4096]; // Storing keys seperately allows for quick iteration through all of the key value pairs in the table, especially with a large table size
+	int index; // Cur index within keys array
 };
 
 /*
@@ -64,6 +67,11 @@ uint32_t stockTableHash(char* key, size_t bitMask);
  * free must be called on table aswell to fully deallocate the table.
  */
 void stockTableFree(struct StockTable* table);
+
+/*
+ * Outputs a stock table and budget info to a file, nicely formatted
+ */
+void stockTableDump(struct StockTable* table, double originalBudget, double finalBudget, double threshold, FILE* file);
 
 /*
  * Will return the MSB of a binary number
