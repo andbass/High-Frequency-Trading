@@ -15,7 +15,7 @@
 #include "conf.h"
 #include "command.h"
 
-#define LINE "==============================\n"
+#define LINE "===================================\n"
 
 /*
  * Will get either the input file specified or return stdin, depending on the commandline arguments.
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
 
 	// Inital file IO
 	FILE* inputFile = getInputFile(argc, argv);
-	FILE* outputFile = fopen("output.txt", "w");
+	FILE* outputFile = freopen("output.txt", "w", stdout);
 	FILE* executedFile = fopen("executed.txt", "w");
 
 	if (outputFile == NULL || executedFile == NULL) {
@@ -81,6 +81,14 @@ int main(int argc, char* argv[]){
 		getInput = &fgets;
 	}
 	
+	char* initialMessage = "";
+	char* closingMessage = "";
+	if (inputFile == stdin) {
+		initialMessage = "Press Ctrl + D to exit\n";
+		closingMessage = "\n";
+	}
+
+	puts(initialMessage);
 	while (true) {
 		char* line = getInput(buffer, 4096, inputFile);
 		
@@ -89,16 +97,18 @@ int main(int argc, char* argv[]){
 		}
 
 		if (parseCommand(line, &cmd)){
-			printf("Action: %s, Stock: %s, Shares: %d, Safe: %d\n", (cmd.action == BUY) ? "BUY" : "SELL", cmd.stock, cmd.shares, cmd.safe);
-
 			if (execCommand(&cmd, &table, &budget, threshold)){
-				printf("Budget: %f\n", budget);
-				fputs(line, executedFile); 
+				
+				// Output executed command string as is
+				fputs(line, executedFile);	
 			}	
 		}
-		printf(LINE);
 	}
+	
+	fclose(inputFile);
+	fclose(executedFile);
+	fclose(outputFile);
 
-	printf("\n");
+	puts(closingMessage);
 	return EXIT_SUCCESS;
 }	
