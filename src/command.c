@@ -2,12 +2,15 @@
 #include <string.h>
 
 // Seperator used in command string
-const char* SEPERATORS = " ";
+const char* SEPERATORS = " \n";
 
 inline void freeCommand(struct Command* cmd){
 	free(cmd->stock);
 }
 
+/*
+ * Extracts relevant info out of a string, stores it into a Command
+ */
 bool parseCommand(char* str, struct Command* cmd){
 
 	// Need to create new string, as strtok modifies its first argument
@@ -18,7 +21,10 @@ bool parseCommand(char* str, struct Command* cmd){
 	char* tok = strtok(copy, SEPERATORS);
 
 	// Should only be one character
-	if (strlen(tok) != 1) return false;
+	if (strlen(tok) != 1) {
+		printf("Error: Action should only be one character long\n");
+		return false;
+	}	
 
 	if (strcmp(tok, "B") == 0){
 		cmd->action = BUY;
@@ -69,7 +75,10 @@ bool parseCommand(char* str, struct Command* cmd){
 
 bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, const double threshold){
 	struct StockEntry* entry = stockTableGetEntry(table, cmd->stock);	
-	if (entry == NULL) return false;
+	if (entry == NULL) {
+		printf("Error: %s is not a stock that was specified in the .conf file (remember, stock names are case-senstive)\n", cmd->stock);	
+		return false;
+	}
 
 	double newBudget;
 	switch (cmd->action){

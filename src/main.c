@@ -15,6 +15,11 @@
 #include "conf.h"
 #include "command.h"
 
+#define LINE "==============================\n"
+
+/*
+ * Will get either the input file specified or return stdin, depending on the commandline arguments.
+ */
 FILE* getInputFile(int argc, char* argv[]){
 
 	FILE* inputFile = NULL;
@@ -33,6 +38,15 @@ FILE* getInputFile(int argc, char* argv[]){
 		exit(EXIT_FAILURE);
 	}
 	return inputFile;
+}
+
+/*
+ * Gets user input and prints a '>' to the screen.
+ * Requires a FILE* parameter to match function pointer
+ */
+char* getInputFromUser(char* buf, int size, FILE* file){
+	printf("> ");
+	return fgets(buf, size, file);
 }
 
 /*
@@ -60,20 +74,31 @@ int main(int argc, char* argv[]){
 	char buffer[4096];
 	struct Command cmd;
 
+	char* (*getInput)(char*, int, FILE*);
+	if (inputFile == stdin) {
+		getInput = &getInputFromUser;
+	} else {
+		getInput = &fgets;
+	}
+	
 	while (true) {
-		char* line = fgets(buffer, 4096, inputFile);
-
+		char* line = getInput(buffer, 4096, inputFile);
+		
 		if (line == NULL) {
 			break;
 		}
 
-		bool success = parseCommand(line, &cmd);
-		if (!success) exit(EXIT_FAILURE);
+		if (parseCommand(line, &cmd)){
+			printf("Action: %s, Stock: %s, Shares: %d, Safe: %d\n", (cmd.action == BUY) ? "BUY" : "SELL", cmd.stock, cmd.shares, cmd.safe);
 
-		printf("Action: %s, Stock: %s, Shares: %d, Safe: %d\n", (cmd.action == BUY) ? "BUY" : "SELL", cmd.stock, cmd.shares, cmd.safe);
-
-		printf("%s\n", line);
+			if (execCommand(&cmd, &table, &budget, threshold)){
+				printf("Budget: %f\n", budget);
+				fputs(line, executedFile); 
+			}	
+		}
+		printf(LINE);
 	}
 
+	printf("\n");
 	return EXIT_SUCCESS;
 }	
