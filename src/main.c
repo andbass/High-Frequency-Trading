@@ -26,7 +26,7 @@ int main(int argc, char* argv[]){
 	float budget = 0, threshold = 0;
 	parseConf("prices.conf", &budget, &threshold, &table);	
 
-	char* cmdStr = "S AAPL 2 S";
+	char* cmdStr = "B AAPL 1 S";
 
 	struct Command cmd;
 	parseCommand(cmdStr, &cmd);

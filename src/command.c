@@ -63,10 +63,22 @@ bool execCommand(struct Command* cmd, struct StockTable* table, float* budget, c
 	struct StockEntry* entry = stockTableGetEntry(table, cmd->stock);	
 	if (entry == NULL) return false;
 
+	float newBudget;
 	switch (cmd->action){
 		
 		case BUY:
-			
+			newBudget = *budget - cmd->shares * entry->price;
+
+			if (cmd->safe && newBudget < threshold){
+				printf("Error: Budget amount (%f) would fall below threshold (%f) if %d shares of %s were to be bought", *budget, threshold, cmd->shares, entry->stock);	
+				return false;			
+			} else if (newBudget < 0){
+				printf("Error: Budget amount (%f) would be negative if %d shares of %f were to be sold", *budget, cmd->shares, entry->stock);	
+				return false;
+			} 	
+			entry->sharesOwned += cmd->shares;
+			*budget = newBudget;
+
 			break;
 
 		case SELL:
@@ -75,7 +87,7 @@ bool execCommand(struct Command* cmd, struct StockTable* table, float* budget, c
 				return false;
 			}
 			entry->sharesOwned -= cmd->shares;
-			*budget += cmd->shares * entry->price;
+			*budget += entry->price * cmd->shares;
 			break;
 	}
 
