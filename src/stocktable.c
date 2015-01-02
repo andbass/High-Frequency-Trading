@@ -42,6 +42,7 @@ bool stockTableNew(struct StockTable* table, size_t approxSize){
 		}
 		return true;
 	}
+
 	return false;
 }
 
