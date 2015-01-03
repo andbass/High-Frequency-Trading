@@ -6,9 +6,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define MAX_KEY_LENGTH 2048
+
 /* A linked list meant to be stored within a StockTable. */
 struct StockEntry {
-	char* stock;
+	char stock[MAX_KEY_LENGTH];
 
 	double price;
 	int sharesOwned;

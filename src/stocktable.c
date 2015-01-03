@@ -10,7 +10,7 @@
  * Initalizes a StockEntry struct
  */
 void stockEntryNew(struct StockEntry* entry){
-		entry->stock = NULL;
+		//entry->stock = NULL;
 		entry->price = 0;
 		entry->sharesOwned = 0;
 		entry->next = NULL;
@@ -21,7 +21,7 @@ void stockEntryNew(struct StockEntry* entry){
  */
 void stockEntryFree(struct StockEntry* entry){
 	while(entry != NULL){
-		free(entry->stock);
+		//free(entry->stock);
 		entry = entry->next;
 		free(entry);
 	}
@@ -81,9 +81,14 @@ bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 	}
 	
 	if (!isSameKey){
-		free(entry->stock);
-		entry->stock = malloc(sizeof(char) * (strlen(key) + 1));
-		strcpy(entry->stock, key);
+		//free(entry->stock);
+		//entry->stock = malloc(sizeof(char) * (strlen(key) + 1));
+
+		if (strlen(key) + 1 < MAX_KEY_LENGTH) {
+			strcpy(entry->stock, key);
+		} else {
+			return false;
+		}	
 
 		table->trackedPairs[table->index++] = entry;
 	}	
