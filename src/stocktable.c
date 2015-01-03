@@ -82,7 +82,7 @@ bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 	
 	if (!isSameKey){
 		free(entry->stock);
-		entry->stock = malloc(sizeof(char) * strlen(key));
+		entry->stock = malloc(sizeof(char) * (strlen(key) + 1));
 		strcpy(entry->stock, key);
 
 		table->trackedPairs[table->index++] = entry;
