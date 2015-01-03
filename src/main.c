@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <assert.h>
 #include <time.h>
@@ -22,7 +23,7 @@
 FILE* getInputFile(int argc, char* argv[]){
 
 	FILE* inputFile = NULL;
-
+	
 	if (argc == 1) {
 		inputFile = stdin;
 	} else if (argc == 2){
@@ -93,6 +94,12 @@ int main(int argc, char* argv[]){
 	}
 
 	puts(initialMessage);
+
+	// Now, lets close stdout for a bit if we're reading input from a file, since warnings there are kind of pointless
+	if (inputFile != stdin) {
+		fclose(stdout);	
+	}
+
 	while (true) {
 		char* line = getInput(buffer, 4096, inputFile);
 		
@@ -108,6 +115,10 @@ int main(int argc, char* argv[]){
 		}
 
 	}
+
+	// Ok, lets reopen stdout ;)
+	freopen("/dev/tty", "a", stdout);
+
 	puts(closingMessage);
 	
 	stockTableDump(&table, originalBudget, budget, threshold, outputFile);
