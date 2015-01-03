@@ -92,8 +92,9 @@ int main(int argc, char* argv[]){
 		initialMessage = "Press Ctrl + D to exit\n";
 		closingMessage = "\n";
 	}
-
-	puts(initialMessage);
+	
+	// Using puts adds a newline
+	fputs(initialMessage, stdout);
 
 	// Now, lets close stdout for a bit if we're reading input from a file, since warnings there are kind of pointless
 	if (inputFile != stdin) {
@@ -119,7 +120,7 @@ int main(int argc, char* argv[]){
 	// Ok, lets reopen stdout ;)
 	freopen("/dev/tty", "a", stdout);
 
-	puts(closingMessage);
+	fputs(closingMessage, stdout);
 	
 	stockTableDump(&table, originalBudget, budget, threshold, outputFile);
 	stockTableDump(&table, originalBudget, budget, threshold, stdout);
