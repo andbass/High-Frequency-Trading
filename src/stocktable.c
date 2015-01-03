@@ -84,9 +84,10 @@ bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 		//free(entry->stock);
 		//entry->stock = malloc(sizeof(char) * (strlen(key) + 1));
 
-		if (strlen(key) + 1 < MAX_KEY_LENGTH) {
+		if (strlen(key) < MAX_KEY_LENGTH) {
 			strcpy(entry->stock, key);
 		} else {
+			printf("%s\n", key);
 			return false;
 		}	
 

@@ -6,7 +6,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define MAX_KEY_LENGTH 2048
+// Stock tickets are never more than 4 chars, so size needed can't be over 5 (including null terminator)
+#define MAX_KEY_LENGTH 5
 
 /* A linked list meant to be stored within a StockTable. */
 struct StockEntry {
