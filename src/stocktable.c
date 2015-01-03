@@ -127,7 +127,7 @@ void stockTableDump(struct StockTable* table, double originalBudget, double fina
 	for (int i = 0; i < table->index; i++){
 		struct StockEntry* entry = table->trackedPairs[i];
 
-		fprintf(file, "=\t%s\t=\t%d\n", entry->stock, entry->sharesOwned);
+		fprintf(file, "=\t %s\t=\t%d\n", entry->stock, entry->sharesOwned);
 		fputs(LINE_SEPERATOR, file);	
 	}		
 }
