@@ -103,7 +103,9 @@ int main(int argc, char* argv[]){
 				fputs(line, executedFile);	
 			}	
 		}
+
 	}
+	puts(closingMessage);
 	
 	stockTableDump(&table, originalBudget, budget, threshold, outputFile);
 	stockTableDump(&table, originalBudget, budget, threshold, stdout);
