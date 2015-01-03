@@ -32,11 +32,6 @@ struct Command {
 };
 
 /*
- * Frees memory allocated when parsing a command string
- */
-inline void freeCommand(struct Command* cmd);
-
-/*
  * Parses a command in string form and converts it into a Command struct.
  */
 bool parseCommand(char* str, struct Command* cmd);

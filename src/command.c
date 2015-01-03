@@ -4,10 +4,6 @@
 // Seperator used in command string
 const char* SEPERATORS = " \n";
 
-inline void freeCommand(struct Command* cmd){
-	free(cmd->stock);
-}
-
 /*
  * Extracts relevant info out of a string, stores it into a Command
  */
@@ -90,10 +86,10 @@ bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, 
 			newBudget = *budget - cmd->shares * entry->price;
 
 			if (cmd->safe && newBudget < threshold){
-				printf("Error: Budget amount (%f) would fall below threshold (%f) if %d shares of %s were to be bought", *budget, threshold, cmd->shares, entry->stock);	
+				printf("Error: Budget amount (%f) would fall below threshold (%f) if %d shares of %s were to be bought\n", *budget, threshold, cmd->shares, entry->stock);	
 				return false;			
 			} else if (newBudget < 0){
-				printf("Error: Budget amount (%f) would be negative if %d shares of %f were to be sold", *budget, cmd->shares, entry->stock);	
+				printf("Error: Budget amount (%f) would be negative if %d shares of %f were to be sold\n", *budget, cmd->shares, entry->stock);	
 				return false;
 			} 	
 			entry->sharesOwned += cmd->shares;
