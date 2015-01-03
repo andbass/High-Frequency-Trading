@@ -85,7 +85,7 @@ bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 		entry->stock = malloc(sizeof(char) * strlen(key));
 		strcpy(entry->stock, key);
 
-		table->keys[table->index++] = &entry->stock;
+		table->trackedPairs[table->index++] = entry;
 	}	
 
 	entry->price = value;
@@ -125,10 +125,9 @@ void stockTableDump(struct StockTable* table, double originalBudget, double fina
 	fputs(LINE_SEPERATOR, file);
 
 	for (int i = 0; i < table->index; i++){
-		char** keyLocation = table->keys[i]; // why store a pointer to a char pointer you may ask?	
-		int sharesOwned = *(int*)( (double*)(keyLocation + 1) + 1); // SUPER FAST POINTER MAGIC!!!
-		
-		fprintf(file, "=\t%s\t=\t%d\n", *keyLocation, sharesOwned);
+		struct StockEntry* entry = table->trackedPairs[i];
+
+		fprintf(file, "=\t%s\t=\t%d\n", entry->stock, entry->sharesOwned);
 		fputs(LINE_SEPERATOR, file);	
 	}		
 }

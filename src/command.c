@@ -37,8 +37,11 @@ bool parseCommand(char* str, struct Command* cmd){
 	
 	// Now, lets get the stock
 	tok = strtok(NULL, SEPERATORS);
-
-	cmd->stock = malloc(sizeof(char) * (strlen(tok) + 1));
+	
+	if (strlen(tok) + 1 > MAX_STOCK_LENGTH){
+		printf("Error: stock name is greater than %d characters\n", tok);
+		return false;
+	}
 	strcpy(cmd->stock, tok);
 
 	// Great, time for the number of shares

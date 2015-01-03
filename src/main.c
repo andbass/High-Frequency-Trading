@@ -84,6 +84,9 @@ int main(int argc, char* argv[]){
 	
 	char* initialMessage = "";
 	char* closingMessage = "";
+
+	// if getting input from user, let me them know how to cancel input (send EOF)
+	// also, when closing, we need to add an extra line so the stock table dump doesn't begin after the "> "
 	if (inputFile == stdin) {
 		initialMessage = "Press Ctrl + D to exit\n";
 		closingMessage = "\n";
@@ -114,6 +117,5 @@ int main(int argc, char* argv[]){
 	fclose(executedFile);
 	fclose(outputFile);
 
-	puts(closingMessage);
 	return EXIT_SUCCESS;
 }	

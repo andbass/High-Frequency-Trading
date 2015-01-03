@@ -35,7 +35,7 @@ struct StockTable {
 	size_t size; // Larger size means less chance of collisons, so make this baby large!!!
 	size_t bitMask; // this is ANDed with hash.
 
-	char** keys[4096]; // Storing keys seperately allows for quick iteration through all of the key value pairs in the table, especially with a large table size
+	struct StockEntry* trackedPairs[4096]; // Storing keys seperately allows for quick iteration through all of the key value pairs in the table, especially with a large table size
 	int index; // Cur index within keys array
 };
 

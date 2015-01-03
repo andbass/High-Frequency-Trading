@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include "stocktable.h"
 
+#define MAX_STOCK_LENGTH 2048
+
 /*
  * Whether to buy or sell shares of a stock
  */
@@ -24,7 +26,7 @@ enum Action {
  */
 struct Command {
 	enum Action action;
-	char* stock; 
+	char stock[MAX_STOCK_LENGTH]; 
 	int shares;
 	bool safe;
 };
