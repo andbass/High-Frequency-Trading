@@ -91,7 +91,8 @@ bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, 
 			} else if (newBudget < 0){
 				printf("Error: budget amount (%f) would be negative if %d shares of %s were to be bought\n", *budget, cmd->shares, entry->stock);	
 				return false;
-			} 	
+			}
+
 			entry->sharesOwned += cmd->shares;
 			*budget = newBudget;
 
@@ -102,8 +103,10 @@ bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, 
 				printf("Error: could not sell %d shares of %s, as you only own %d\n", cmd->shares, entry->stock, entry->sharesOwned);
 				return false;
 			}
+
 			entry->sharesOwned -= cmd->shares;
 			*budget += entry->price * cmd->shares;
+
 			break;
 	}
 
