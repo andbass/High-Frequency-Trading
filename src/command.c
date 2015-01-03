@@ -39,7 +39,7 @@ bool parseCommand(char* str, struct Command* cmd){
 	tok = strtok(NULL, SEPERATORS);
 	
 	if (strlen(tok) + 1 > MAX_STOCK_LENGTH){
-		printf("Error: stock name is greater than %d characters\n", tok);
+		printf("Error: stock name is greater than %d characters\n", MAX_STOCK_LENGTH);
 		return false;
 	}
 	strcpy(cmd->stock, tok);
