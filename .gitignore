@@ -9,3 +9,6 @@ hft
 
 # ignore vim's .swp temp files
 *.swp
+
+# .txt files aren't essential
+*.txt
