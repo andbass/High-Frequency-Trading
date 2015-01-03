@@ -112,23 +112,23 @@ struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key){
 
 void stockTableDump(struct StockTable* table, double originalBudget, double finalBudget, double threshold, FILE* file){
 	fputs(LINE_SEPERATOR, file);
-	fprintf(file, "= Starting Budget:\t%.0lf\t=\n", originalBudget);
+	fprintf(file, "= Starting Budget:\t%.0lf\n", originalBudget);
 	fputs(LINE_SEPERATOR, file);
 
-	fprintf(file, "= Ending Budget:\t%.0lf\t=\n", finalBudget);
+	fprintf(file, "= Ending Budget:\t%.0lf\n", finalBudget);
 	fputs(LINE_SEPERATOR, file);
 
-	fprintf(file, "= Threshold:\t%.0lf\t=\n", threshold);
+	fprintf(file, "= Threshold:\t\t%.0lf\n", threshold);
 	fputs(LINE_SEPERATOR, file);
 	
-	fputs("=\tSymbol\t=\t# of Shares\t=\n", file);	
+	fputs("=\tSymbol\t=\t# of Shares\n", file);	
 	fputs(LINE_SEPERATOR, file);
 
 	for (int i = 0; i < table->index; i++){
 		char** keyLocation = table->keys[i]; // why store a pointer to a char pointer you may ask?	
 		int sharesOwned = *(int*)( (double*)(keyLocation + 1) + 1); // SUPER FAST POINTER MAGIC!!!
 		
-		fprintf(file, "=\t%s\t=\t%d\t=\n", *keyLocation, sharesOwned);
+		fprintf(file, "=\t%s\t=\t%d\n", *keyLocation, sharesOwned);
 		fputs(LINE_SEPERATOR, file);	
 	}		
 }
