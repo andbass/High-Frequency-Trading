@@ -31,6 +31,9 @@ inline static double getFloat(FILE* file, char buf[], size_t size){
 	return val;
 }
 
+/*
+ * Moves a textfile's seeker to the next line
+ */
 inline static void gotoNextLine(FILE* file){
 	int ch = 0;
 	do {

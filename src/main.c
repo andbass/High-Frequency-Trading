@@ -16,12 +16,10 @@
 #include "conf.h"
 #include "command.h"
 
-
 /*
  * Will get either the input file specified or return stdin, depending on the commandline arguments.
  */
 FILE* getInputFile(int argc, char* argv[]){
-
 	FILE* inputFile = NULL;
 	
 	if (argc == 1) {
@@ -53,7 +51,6 @@ char* getInputFromUser(char* buf, int size, FILE* file){
  * Prepares stocktable, parses prices.conf, and handles input / program logic.
  */
 int main(int argc, char* argv[]){
-
 	// Inital file IO
 	FILE* inputFile = getInputFile(argc, argv);
 	FILE* outputFile = fopen("output.txt", "w");

@@ -8,11 +8,10 @@ const char* SEPERATORS = " \n";
  * Extracts relevant info out of a string, stores it into a Command
  */
 bool parseCommand(char* str, struct Command* cmd){
-
 	// Need to create new string, as strtok modifies its first argument
 	char copy[strlen(str) + 1];
 	strcpy(copy, str);
-
+		
 	// Get action, B or S
 	char* tok = strtok(copy, SEPERATORS);
 
@@ -84,7 +83,7 @@ bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, 
 		
 		case BUY:
 			newBudget = *budget - cmd->shares * entry->price;
-
+			
 			if (cmd->safe && newBudget < threshold){
 				printf("Error: budget amount (%f) would fall below threshold (%f) if %d shares of %s were to be bought\n", *budget, threshold, cmd->shares, entry->stock);	
 				return false;			

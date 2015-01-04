@@ -4,6 +4,15 @@ import sys
 import random
 import configparser
 
+actions = ['B', 'S']
+entries = getEntries()
+
+min_shares = 10
+max_shares = 400
+interval = 5
+
+safety = ['S', 'U']
+
 def getEntries():
     entries = []
     
@@ -18,16 +27,6 @@ def getEntries():
             entries.append(key.upper())
 
     return entries
-
-
-actions = ['B', 'S']
-entries = getEntries()
-
-min_shares = 10
-max_shares = 400
-interval = 5
-
-safety = ['S', 'U']
 
 def createCommand():
     action = random.choice(actions)
@@ -48,7 +47,6 @@ if len(sys.argv) != 2:
 command_count = int(sys.argv[1])
 
 with open('input.txt', 'w') as input_file:
-
     for i in range(command_count + 1):
         input_file.write(createCommand())
     
