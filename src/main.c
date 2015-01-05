@@ -88,15 +88,12 @@ int main(int argc, char* argv[]){
 	if (inputFile == stdin) {
 		initialMessage = "Press Ctrl + D to exit\n";
 		closingMessage = "\n";
+	} else {
+		fclose(stderr); // suppress warning messages if input is not from cmdline
 	}
 	
 	// Using puts adds a newline
 	fputs(initialMessage, stdout);
-
-	// Now, lets close stdout for a bit if we're reading input from a file, since warnings there are kind of pointless
-	if (inputFile != stdin) {
-		fclose(stdout);	
-	}
 
 	while (true) {
 		char* line = getInput(buffer, 4096, inputFile);
@@ -113,9 +110,6 @@ int main(int argc, char* argv[]){
 		}
 
 	}
-
-	// Ok, lets reopen stdout ;)
-	freopen("/dev/tty", "a", stdout);
 
 	fputs(closingMessage, stdout);
 	

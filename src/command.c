@@ -17,7 +17,7 @@ bool parseCommand(char* str, struct Command* cmd){
 
 	// Should only be one character
 	if (strlen(tok) != 1) {
-		printf("Error: Action should only be one character long\n");
+		fprintf(stderr, "Error: Action should only be one character long\n");
 		return false;
 	}	
 
@@ -26,7 +26,7 @@ bool parseCommand(char* str, struct Command* cmd){
 	} else if (strcmp(tok, "S") == 0){
 		cmd->action = SELL;
  	} else {
-		printf("Error: %s is an invalid action\n", tok);
+		fprintf(stderr, "Error: %s is an invalid action\n", tok);
 		return false;
 	}
 	
@@ -34,7 +34,7 @@ bool parseCommand(char* str, struct Command* cmd){
 	tok = strtok(NULL, SEPERATORS);
 	
 	if (strlen(tok) + 1 > MAX_KEY_LENGTH){
-		printf("Error: stock name is greater than %d characters\n", MAX_KEY_LENGTH);
+		fprintf(stderr, "Error: stock name is greater than %d characters\n", MAX_KEY_LENGTH);
 		return false;
 	}
 	strcpy(cmd->stock, tok);
@@ -46,7 +46,7 @@ bool parseCommand(char* str, struct Command* cmd){
 	cmd->shares = strtol(tok, &endPtr, 10);
 
 	if (tok == endPtr) {
-		printf("Could not parse %s into a number\n", tok);
+		fprintf(stderr, "Error: could not parse %s into a number\n", tok);
 		return false; // if endPtr points back to string storing number, that means strtol failed
 	}
 
@@ -55,7 +55,7 @@ bool parseCommand(char* str, struct Command* cmd){
 
 	// Like the action, should only be one char	
 	if (strlen(tok) != 1) {
-		printf("Error: The safety indicator should only be one character: %s\n", tok);
+		fprintf(stderr, "Error: The safety indicator should only be one character: %s\n", tok);
 		return false;
 	}	
 
@@ -64,7 +64,7 @@ bool parseCommand(char* str, struct Command* cmd){
 	} else if (strcmp(tok, "U") == 0) {
 		cmd->safe = false;
 	} else {
-		printf("Error: %s is an invalid safety symbol\n", tok);
+		fprintf(stderr, "Error: %s is an invalid safety symbol\n", tok);
 		return false;
 	}
 
@@ -74,7 +74,7 @@ bool parseCommand(char* str, struct Command* cmd){
 bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, const double threshold){
 	struct StockEntry* entry = stockTableGetEntry(table, cmd->stock);	
 	if (entry == NULL) {
-		printf("Error: %s is not a stock that was specified in the .conf file (remember, stock names are case-senstive)\n", cmd->stock);	
+		fprintf(stderr, "Error: %s is not a stock that was specified in the .conf file (remember, stock names are case-senstive)\n", cmd->stock);	
 		return false;
 	}
 
@@ -85,10 +85,10 @@ bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, 
 			newBudget = *budget - cmd->shares * entry->price;
 			
 			if (cmd->safe && newBudget < threshold){
-				printf("Error: budget amount (%f) would fall below threshold (%f) if %d shares of %s were to be bought\n", *budget, threshold, cmd->shares, entry->stock);	
+				fprintf(stderr, "Error: budget amount (%f) would fall below threshold (%f) if %d shares of %s were to be bought\n", *budget, threshold, cmd->shares, entry->stock);	
 				return false;			
 			} else if (newBudget < 0){
-				printf("Error: budget amount (%f) would be negative if %d shares of %s were to be bought\n", *budget, cmd->shares, entry->stock);	
+				fprintf(stderr, "Error: budget amount (%f) would be negative if %d shares of %s were to be bought\n", *budget, cmd->shares, entry->stock);	
 				return false;
 			}
 
@@ -99,7 +99,7 @@ bool execCommand(struct Command* cmd, struct StockTable* table, double* budget, 
 
 		case SELL:
 			if (cmd->shares > entry->sharesOwned) {
-				printf("Error: could not sell %d shares of %s, as you only own %d\n", cmd->shares, entry->stock, entry->sharesOwned);
+				fprintf(stderr, "Error: could not sell %d shares of %s, as you only own %d\n", cmd->shares, entry->stock, entry->sharesOwned);
 				return false;
 			}
 
