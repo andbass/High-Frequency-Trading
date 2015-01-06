@@ -89,7 +89,7 @@ int main(int argc, char* argv[]){
 		initialMessage = "Press Ctrl + D to exit\n";
 		closingMessage = "\n";
 	} else {
-		fclose(stderr); // suppress warning messages if input is not from cmdline
+	//	fclose(stderr); // suppress warning messages if input is not from cmdline
 	}
 	
 	// Using puts adds a newline
