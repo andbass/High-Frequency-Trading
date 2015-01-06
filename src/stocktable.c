@@ -106,8 +106,6 @@ struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key){
 	uint32_t index = stockTableHash(key, table->bitMask);
 	struct StockEntry* entry = table->entries + index;
 
-	printf("%s\n", entry->stock);
-
 	if (strcmp(entry->stock, EMPTY_STRING) != 0) {
 
 		while (entry != NULL){
