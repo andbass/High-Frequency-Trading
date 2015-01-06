@@ -1,6 +1,7 @@
 LANG:=C
 OUTPUT:=hft
 LIBS:=
+FLAGS:= -g
 
 ifeq "$(LANG)" "C++"
        	EXT:=cpp
@@ -18,7 +19,7 @@ SRC:=$(shell find src -name *.${EXT})
 OBJ:=$(SRC:src/%.${EXT}=obj/%.o)
 DEP:=$(OBJ:%.o=%.d)
 
-CFLAGS:= -std=$(STD) $(LIBS)
+CFLAGS:= -std=$(STD) $(LIBS) $(FLAGS) 
 SHELL := /bin/bash
 INSTALL_DIR := /usr/local/bin
 

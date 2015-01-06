@@ -48,7 +48,7 @@ inline static void gotoNextLine(FILE* file){
  * Returns EOF if end of file is reached, 0 if parsed successfully,
  * or 1 if an error is encountered in parsing.
  */
-inline static int insertKeyValuePair(FILE* file, struct StockTable* table, char buf[], size_t size){
+static int insertKeyValuePair(FILE* file, struct StockTable* table, char buf[], size_t size){
 	unsigned int i = 0;
 	int ch = 0;
 	while (i < size - 1){ // why (size - 1)?  leave room for null terminator

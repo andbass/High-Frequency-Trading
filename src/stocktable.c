@@ -5,12 +5,13 @@
 #define FNV_PRIME 16777619
 
 #define LINE_SEPERATOR "===================================\n"
+#define EMPTY_STRING ""
 
 /*
  * Initalizes a StockEntry struct
  */
 void stockEntryNew(struct StockEntry* entry){
-		//entry->stock = NULL;
+		strcpy(entry->stock, EMPTY_STRING);
 		entry->price = 0;
 		entry->sharesOwned = 0;
 		entry->next = NULL;
@@ -60,7 +61,7 @@ bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 	bool isSameKey = false;
 
 	// only search through list if first slot isnt open
-	if (entry->stock != NULL){
+	if (strcmp(entry->stock, EMPTY_STRING)){
 
 		while (entry != NULL){
 			if (strcmp(key, entry->stock) == 0) {
@@ -87,7 +88,7 @@ bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 		if (strlen(key) < MAX_KEY_LENGTH) {
 			strcpy(entry->stock, key);
 		} else {
-			printf("%s\n", key);
+			fprintf(stderr, "Error: %s is longer than %d characters\n", key, MAX_KEY_LENGTH);
 			return false;
 		}	
 
@@ -104,6 +105,8 @@ bool stockTableSetPrice(struct StockTable* table, char* key, double value){
 struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key){
 	uint32_t index = stockTableHash(key, table->bitMask);
 	struct StockEntry* entry = table->entries + index;
+
+	printf("%s\n", entry->stock);
 
 	if (entry->stock != NULL){
 		while (entry != NULL){
