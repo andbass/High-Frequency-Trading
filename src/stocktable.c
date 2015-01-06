@@ -108,7 +108,8 @@ struct StockEntry* stockTableGetEntry(struct StockTable* table, char* key){
 
 	printf("%s\n", entry->stock);
 
-	if (entry->stock != NULL){
+	if (strcmp(entry->stock, EMPTY_STRING) != 0) {
+
 		while (entry != NULL){
 			if (strcmp(key, entry->stock) == 0) {
 				return entry;
