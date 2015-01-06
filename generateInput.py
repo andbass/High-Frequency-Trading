@@ -4,15 +4,6 @@ import sys
 import random
 import configparser
 
-actions = ['B', 'S']
-entries = getEntries()
-
-min_shares = 10
-max_shares = 400
-interval = 5
-
-safety = ['S', 'U']
-
 def getEntries():
     entries = []
     
@@ -39,6 +30,14 @@ def createCommand():
 
     return action + ' ' + stock + ' ' + repr(shares) + ' ' + safe + '\n'
 
+actions = ['B', 'S']
+entries = getEntries()
+
+min_shares = 10
+max_shares = 400
+interval = 5
+
+safety = ['S', 'U']
     
 if len(sys.argv) != 2:
     print('Usage: python[version] generateInput.py (number of commands to generate)')
