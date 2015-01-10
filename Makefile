@@ -1,7 +1,7 @@
 LANG:=C
 OUTPUT:=hft
 LIBS:=
-FLAGS:=
+FLAGS:= -g
 
 ifeq "$(LANG)" "C++"
        	EXT:=cpp

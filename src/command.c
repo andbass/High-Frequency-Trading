@@ -2,7 +2,7 @@
 #include <string.h>
 
 // Seperator used in command string
-const char* SEPERATORS = " \n";
+const char* SEPERATORS = " \n\t";
 
 /*
  * Extracts relevant info out of a string, stores it into a Command
@@ -11,15 +11,17 @@ bool parseCommand(char* str, struct Command* cmd){
 	// Need to create new string, as strtok modifies its first argument
 	char copy[strlen(str) + 1];
 	strcpy(copy, str);
-		
+
 	// Get action, B or S
 	char* tok = strtok(copy, SEPERATORS);
 
-	// Should only be one character
-	if (strlen(tok) != 1) {
+	// if tok is NULL, strtok couldn't find any tokens, and therefore must be blank line
+	if (tok == NULL) {
+		return false; 
+	} else if (strlen(tok) != 1) { // Should only be one character
 		fprintf(stderr, "Error: Action should only be one character long\n");
 		return false;
-	}	
+	}
 
 	if (strcmp(tok, "B") == 0){
 		cmd->action = BUY;

@@ -12,9 +12,11 @@ def getEntries():
         conf_string = '[section]\n' + file.read()
        
     conf.read_string(conf_string)   
+    
+    conf.remove_option('section', 'budget')
+    conf.remove_option('section', 'threshold')
 
     for key in conf['section']:
-        if key != 'budget' and key != 'threshold':
             entries.append(key.upper())
 
     return entries
